@@ -1,13 +1,19 @@
 const express = require('express')
 const app = express()
+const taskRouter = require('./routes/task')
 
+
+// Middlewares
 app.use(express.static('./public'))
+app.use(express.json())
 
-app.get('/', (req, res) => {
-    // console.log(req)
-    res.status(201).send('Home Page')
-})
+//routes
+app.use('/api/v1/tasks', taskRouter)
 
-app.listen(3000, () => {
+
+
+let port = 3000
+
+app.listen(port, () => {
     console.log('server started')
 })
