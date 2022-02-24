@@ -38,7 +38,20 @@ const updateSpecificTask = (req, res) => {
     res.send('Update specific task')
 }
 
-const deleteTask = (req, res) => {
-    res.send('Delete task')
+const deleteTask = async (req, res) => {
+    try {
+        // const { id } = req.params
+        // console.log(id)
+        const tasks = await task.findOneAndDelete({ _id: req.params.id })
+        if (!tasks) {
+            return res.status(501).json({ msg: `${req.params.id} doesn't exist` })
+        }
+        res.json(tasks)
+        // res.send('something')
+
+    } catch (error) {
+        res.status(501).json({ error })
+
+    }
 }
 module.exports = { getAllTasks, createTask, getSpecificTask, updateSpecificTask, deleteTask }
