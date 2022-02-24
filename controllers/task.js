@@ -3,7 +3,7 @@ const getAllTasks = async (req, res) => {
     // res.send('all the tasks')
     try {
         const tasks = await task.find({})
-        res.json(tasks)
+        res.json({ tasks })
     } catch (error) {
         res.status(501).json({ error })
     }
@@ -34,9 +34,6 @@ const createTask = async (req, res) => {
 
 }
 
-const updateSpecificTask = (req, res) => {
-    res.send('Update specific task')
-}
 
 const deleteTask = async (req, res) => {
     try {
@@ -54,4 +51,23 @@ const deleteTask = async (req, res) => {
 
     }
 }
+
+const updateSpecificTask = async (req, res) => {
+    // res.send('Update specific task')
+    // console.log(req.params.id)
+    try {
+        const tasks = await task.findOneAndUpdate({ id: req.params.id }, req.body, {
+            new: true,
+            runValidators: true,
+            overwrite: true
+        })
+        if (!tasks) {
+            return res.status(401).json({ msg: `no such record with id ${req.params.id}` })
+        }
+        res.json({ tasks })
+    } catch (error) {
+        res.status(401).json({ error })
+    }
+}
+
 module.exports = { getAllTasks, createTask, getSpecificTask, updateSpecificTask, deleteTask }
